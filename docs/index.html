@@ -47,6 +47,7 @@
   <style>
     * {
       box-sizing: border-box;
+      margin: 0;
     }
     html,
     body {
@@ -62,15 +63,28 @@
       max-width: 800px;
       margin: 0 auto;
       padding: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
+    .container {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      top: 80px;
+    }
     h1 {
       color: black;
       font-size: 80px;
+      line-height: 1;
+      margin-bottom: 32px;
     }
     @media screen and (min-width: 768px) {
       h1 {
-        font-size: 120px;
+        font-size: 140px;
+        margin-bottom: 32px;
       }
     }
 
@@ -78,25 +92,35 @@
       background-color: #f4f4f4;
       border: 1px solid #ddd;
       border-radius: 4px;
-      padding: 15px;
+      padding: 12px;
       overflow-x: auto;
+      text-align: left;
+    }
+    .code-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    code {
+      display: block;
+      font-family: "Courier New", Courier, monospace;
+      font-size: 14px;
     }
 
-    code {
-      font-family: "Courier New", Courier, monospace;
+    #releastBalloonsButton {
+      width: 100%;
     }
   </style>
   <body>
     <div class="container">
       <h1>Balloons</h1>
-
-      <h2>Usage</h2>
-      <pre><code>npm install balloons-js</code></pre>
-      <pre><code>import { balloons } from 'balloons-js';
-
+      <div class="code-wrapper">
+        <pre><code>npm install balloons-js</code></pre>
+        <pre><code>import { balloons } from "balloons-js";
+              
 balloons();</code></pre>
-
-      <button id="releastBalloonsButton">Release Balloons</button>
+        <button id="releastBalloonsButton">Release Balloons</button>
+      </div>
     </div>
     <script src="script.js"></script>
   </body>

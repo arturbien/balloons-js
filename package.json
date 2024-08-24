@@ -23,12 +23,12 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/arturbien/balloons.git"
+    "url": "https://github.com/arturbien/balloons-js.git"
   },
   "bugs": {
-    "url": "https://github.com/arturbien/balloons/issues"
+    "url": "https://github.com/arturbien/balloons-js/issues"
   },
-  "homepage": "https://github.com/arturbien/balloons#readme",
+  "homepage": "https://github.com/arturbien/balloons-js#readme",
   "devDependencies": {
     "typescript": "^4.9.5",
     "rollup": "^2.79.1",
