@@ -79,115 +79,122 @@ function createBalloonAnimation({
   return { balloon, getAnimation };
 }
 
-export function balloons() {
-  const balloonsContainer = document.createElement("balloons");
-  balloonsContainer.style.setProperty("--perspective-origin-x", "50vw");
-  balloonsContainer.style.setProperty("--perspective-origin-y", "100vh");
-  balloonsContainer.style.overflow = "hidden";
-  balloonsContainer.style.position = "fixed";
-  balloonsContainer.style.inset = "0";
-  balloonsContainer.style.zIndex = "999";
-  balloonsContainer.style.display = "inline-block";
-  balloonsContainer.style.pointerEvents = "none";
-  balloonsContainer.style.perspective = "1500px";
-  balloonsContainer.style.perspectiveOrigin =
-    "var(--perspective-origin-x) var(--perspective-origin-y)";
-  balloonsContainer.style.contain = "style, layout, paint";
+export function balloons(): Promise<void> {
+  return new Promise((resolve) => {
+    const balloonsContainer = document.createElement("balloons");
+    balloonsContainer.style.setProperty("--perspective-origin-x", "50vw");
+    balloonsContainer.style.setProperty("--perspective-origin-y", "100vh");
+    balloonsContainer.style.overflow = "hidden";
+    balloonsContainer.style.position = "fixed";
+    balloonsContainer.style.inset = "0";
+    balloonsContainer.style.zIndex = "999";
+    balloonsContainer.style.display = "inline-block";
+    balloonsContainer.style.pointerEvents = "none";
+    balloonsContainer.style.perspective = "1500px";
+    balloonsContainer.style.perspectiveOrigin =
+      "var(--perspective-origin-x) var(--perspective-origin-y)";
+    balloonsContainer.style.contain = "style, layout, paint";
 
-  document.documentElement.appendChild(balloonsContainer);
+    document.documentElement.appendChild(balloonsContainer);
 
-  const sceneSize = { width: window.innerWidth, height: window.innerHeight };
-  // make balloon height relative to screen size for this nice bokeh/perspective effect
-  const balloonHeight = Math.floor(
-    Math.min(sceneSize.width, sceneSize.height) * 1
-  );
-
-  const balloonWidth =
-    (balloonDefaultSize.width / balloonDefaultSize.height) * balloonHeight;
-  let amount = Math.max(5, Math.round(window.innerWidth / (balloonWidth / 2)));
-  // make max dist depend on number of balloons and their size for realistic effect
-  // we dont want them to be too separated or too squeezed together
-  const maxDist = Math.max(
-    (amount * balloonWidth) / 2,
-    (balloonWidth / 2) * 10
-  );
-
-  type BallonPosition = {
-    x: number;
-    y: number;
-    z: number;
-    targetX: number;
-    targetY: number;
-    targetZ: number;
-  };
-
-  let balloonPositions: BallonPosition[] = [];
-
-  for (let i = 0; i < amount; i++) {
-    const x = Math.round(sceneSize.width * Math.random());
-    // make sure balloons first render below the bottom of the screen
-    const y = window.innerHeight;
-    const z = Math.round(-1 * (Math.random() * maxDist));
-
-    const targetX = Math.round(
-      x + Math.random() * balloonWidth * 6 * (Math.random() > 0.5 ? 1 : -1)
+    const sceneSize = { width: window.innerWidth, height: window.innerHeight };
+    // make balloon height relative to screen size for this nice bokeh/perspective effect
+    const balloonHeight = Math.floor(
+      Math.min(sceneSize.width, sceneSize.height) * 1
     );
-    const targetY = -window.innerHeight;
-    // balloons don't move in the Z direction
-    const targetZ = z;
-    balloonPositions.push({
-      x,
-      y,
-      z,
-      targetX,
-      targetY,
-      targetZ,
-    });
-  }
 
-  balloonPositions = balloonPositions.sort((a, b) => a.z - b.z);
-  const closestBallonPosition = balloonPositions[balloonPositions.length - 1];
-  const farthestBallonPosition = balloonPositions[0];
-  // console.log({ closestBallonPosition, farthestBallonPosition });
-  balloonPositions = balloonPositions.map((pos) => ({
-    ...pos,
-    z: pos.z - closestBallonPosition.z,
-    targetZ: pos.z - closestBallonPosition.z,
-  }));
+    const balloonWidth =
+      (balloonDefaultSize.width / balloonDefaultSize.height) * balloonHeight;
+    let amount = Math.max(
+      5,
+      Math.round(window.innerWidth / (balloonWidth / 2))
+    );
+    // make max dist depend on number of balloons and their size for realistic effect
+    // we dont want them to be too separated or too squeezed together
+    const maxDist = Math.max(
+      (amount * balloonWidth) / 2,
+      (balloonWidth / 2) * 10
+    );
 
-  const filtersElement = document.createElement("div");
-  filtersElement.innerHTML = svgFiltersHtml;
-  balloonsContainer.appendChild(filtersElement);
+    type BallonPosition = {
+      x: number;
+      y: number;
+      z: number;
+      targetX: number;
+      targetY: number;
+      targetZ: number;
+    };
 
-  let currentZIndex = 1;
+    let balloonPositions: BallonPosition[] = [];
 
-  const animations = balloonPositions.map((pos) => {
-    const colorPair = colorPairs[Math.floor(Math.random() * colorPairs.length)];
+    for (let i = 0; i < amount; i++) {
+      const x = Math.round(sceneSize.width * Math.random());
+      // make sure balloons first render below the bottom of the screen
+      const y = window.innerHeight;
+      const z = Math.round(-1 * (Math.random() * maxDist));
 
-    const balloon = createBalloon({
-      width: balloonWidth,
-      colors: colorPair,
-    });
-    balloonsContainer.appendChild(balloon);
+      const targetX = Math.round(
+        x + Math.random() * balloonWidth * 6 * (Math.random() > 0.5 ? 1 : -1)
+      );
+      const targetY = -window.innerHeight;
+      // balloons don't move in the Z direction
+      const targetZ = z;
+      balloonPositions.push({
+        x,
+        y,
+        z,
+        targetX,
+        targetY,
+        targetZ,
+      });
+    }
 
-    return createBalloonAnimation({
-      balloon,
+    balloonPositions = balloonPositions.sort((a, b) => a.z - b.z);
+    const closestBallonPosition = balloonPositions[balloonPositions.length - 1];
+    const farthestBallonPosition = balloonPositions[0];
+    // console.log({ closestBallonPosition, farthestBallonPosition });
+    balloonPositions = balloonPositions.map((pos) => ({
       ...pos,
-      zIndex: currentZIndex++,
-    });
-  });
-  // Wait a bit for the balloon prerender
-  requestAnimationFrame(() => {
-    animations.forEach(({ balloon, getAnimation }) => {
-      const a = getAnimation();
+      z: pos.z - closestBallonPosition.z,
+      targetZ: pos.z - closestBallonPosition.z,
+    }));
 
-      a.finished.then(() => {
-        balloon.remove();
+    const filtersElement = document.createElement("div");
+    filtersElement.innerHTML = svgFiltersHtml;
+    balloonsContainer.appendChild(filtersElement);
+
+    let currentZIndex = 1;
+
+    const animations = balloonPositions.map((pos) => {
+      const colorPair =
+        colorPairs[Math.floor(Math.random() * colorPairs.length)];
+
+      const balloon = createBalloon({
+        width: balloonWidth,
+        colors: colorPair,
+      });
+      balloonsContainer.appendChild(balloon);
+
+      return createBalloonAnimation({
+        balloon,
+        ...pos,
+        zIndex: currentZIndex++,
+      });
+    });
+
+    // Wait a bit for the balloon prerender
+    requestAnimationFrame(() => {
+      const animationPromises = animations.map(({ balloon, getAnimation }) => {
+        const a = getAnimation();
+        return a.finished.then(() => {
+          balloon.remove();
+        });
+      });
+
+      Promise.all(animationPromises).then(() => {
+        balloonsContainer.remove();
+        resolve();
       });
     });
   });
-
-  return () => {
-    balloonsContainer.remove();
-  };
 }
