@@ -95,7 +95,7 @@ export function balloons(): Promise<void> {
       zIndex: "999",
       display: "inline-block",
       pointerEvents: "none",
-      perspective: "1500px",
+      perspective: "1000px",
       perspectiveOrigin: "50vw 100vh",
       contain: "style, layout, paint",
     });
