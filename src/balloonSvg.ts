@@ -20,28 +20,30 @@ export const createBallonElement = ({
   lightColor: string;
   width: number;
 }) => {
-  const wrapper = document.createElement("balloon");
+  const balloon = document.createElement("balloon");
 
-  wrapper.innerHTML = balloonSvgHTML;
-  wrapper.style.position = "fixed";
-  wrapper.style.overflow = "hidden";
-  wrapper.style.position = "absolute";
-  wrapper.style.top = "0";
-  wrapper.style.left = "0";
-  wrapper.style.display = "inline-block";
-  wrapper.style.isolation = "isolate";
-  wrapper.style.transformStyle = "preserve-3d";
-  wrapper.style.opacity = "0.001";
-  wrapper.style.transform = "translate(calc(-100% + 1px), calc(-100% + 1px))";
-  wrapper.style.contain = "style, layout, paint";
-  wrapper.style.willChange = "transform";
+  balloon.innerHTML = balloonSvgHTML;
+  balloon.style.position = "fixed";
+  balloon.style.overflow = "hidden";
+  balloon.style.position = "absolute";
+  balloon.style.top = "0";
+  balloon.style.left = "0";
+  balloon.style.display = "inline-block";
+  balloon.style.isolation = "isolate";
+  balloon.style.transformStyle = "preserve-3d";
+  balloon.style.backfaceVisibility = "hidden";
+  balloon.style.opacity = "0.001";
+  balloon.style.transform = "translate(calc(-100% + 1px), calc(-100% + 1px))";
+  balloon.style.contain = "style, layout, paint";
+  // without the will-change safari starts rendering ballons with a slight delay which makes the animation look bad
+  balloon.style.willChange = "transform";
 
-  wrapper.style.setProperty(balloonColorProperty, balloonColor);
-  wrapper.style.setProperty(lightColorProperty, lightColor);
-  wrapper.style.setProperty(widthProperty, width + "px");
-  wrapper.style.setProperty(heightProperty, (width * 609) / 223 + "px");
+  balloon.style.setProperty(balloonColorProperty, balloonColor);
+  balloon.style.setProperty(lightColorProperty, lightColor);
+  balloon.style.setProperty(widthProperty, width + "px");
+  balloon.style.setProperty(heightProperty, (width * 609) / 223 + "px");
 
-  return wrapper;
+  return balloon;
 };
 
 export const balloonSvgHTML = `

@@ -9,8 +9,6 @@ const easings = [
   "cubic-bezier(0.22, 1, 0.36, 1)",
   // easeOutCubic
   "cubic-bezier(0.33, 1, 0.68, 1)",
-  //   // easeOutCirc
-  //   "cubic-bezier(0, 0.55, 0.45, 1)",
 ];
 const colorPairs = [
   // yellow
@@ -55,6 +53,8 @@ function createBalloonAnimation({
   zIndex: number;
 }) {
   balloon.style.zIndex = zIndex.toString();
+  // Add blur to the closes ballons for bokeh effect
+  balloon.style.filter = `blur(${zIndex > 7 ? 8 : 0}px)`;
   const getAnimation = () => {
     return balloon.animate(
       [
@@ -72,7 +72,7 @@ function createBalloonAnimation({
       {
         duration: (Math.random() * 1000 + 5000) * 5,
         easing: easings[Math.floor(Math.random() * easings.length)],
-        delay: Math.random() * 500,
+        delay: zIndex * 160,
       }
     );
   };
@@ -165,9 +165,8 @@ export function balloons(): Promise<void> {
 
     let currentZIndex = 1;
 
-    const animations = balloonPositions.map((pos) => {
-      const colorPair =
-        colorPairs[Math.floor(Math.random() * colorPairs.length)];
+    const animations = balloonPositions.map((pos, index) => {
+      const colorPair = colorPairs[index % colorPairs.length];
 
       const balloon = createBalloon({
         width: balloonWidth,

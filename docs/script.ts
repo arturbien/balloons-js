@@ -5,6 +5,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   button?.addEventListener("click", async () => {
     await balloons();
-    alert("DONE");
+    // alert("DONE");
   });
 });
