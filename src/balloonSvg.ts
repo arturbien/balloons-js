@@ -23,20 +23,20 @@ export const createBallonElement = ({
   const balloon = document.createElement("balloon");
 
   balloon.innerHTML = balloonSvgHTML;
-  balloon.style.position = "fixed";
-  balloon.style.overflow = "hidden";
-  balloon.style.position = "absolute";
-  balloon.style.top = "0";
-  balloon.style.left = "0";
-  balloon.style.display = "inline-block";
-  balloon.style.isolation = "isolate";
-  balloon.style.transformStyle = "preserve-3d";
-  balloon.style.backfaceVisibility = "hidden";
-  balloon.style.opacity = "0.001";
-  balloon.style.transform = "translate(calc(-100% + 1px), calc(-100% + 1px))";
-  balloon.style.contain = "style, layout, paint";
-  // without the will-change safari starts rendering ballons with a slight delay which makes the animation look bad
-  balloon.style.willChange = "transform";
+  Object.assign(balloon.style, {
+    position: "absolute",
+    overflow: "hidden",
+    top: "0",
+    left: "0",
+    display: "inline-block",
+    isolation: "isolate",
+    transformStyle: "preserve-3d",
+    backfaceVisibility: "hidden",
+    opacity: "0.001",
+    transform: "translate(calc(-100% + 1px), calc(-100% + 1px))",
+    contain: "style, layout, paint",
+    willChange: "transform", // Improves rendering performance in Safari
+  });
 
   balloon.style.setProperty(balloonColorProperty, balloonColor);
   balloon.style.setProperty(lightColorProperty, lightColor);

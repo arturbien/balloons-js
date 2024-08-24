@@ -23,16 +23,6 @@ const colorPairs = [
   ["#cf85b8ee", "#a3509dff"],
 ];
 
-function createBalloon({ width, colors }: { width: number; colors: string[] }) {
-  const balloon = createBallonElement({
-    balloonColor: colors[1],
-    lightColor: colors[0],
-    width,
-  });
-
-  return balloon;
-}
-
 function createBalloonAnimation({
   balloon,
   x,
@@ -82,18 +72,18 @@ function createBalloonAnimation({
 export function balloons(): Promise<void> {
   return new Promise((resolve) => {
     const balloonsContainer = document.createElement("balloons");
-    balloonsContainer.style.setProperty("--perspective-origin-x", "50vw");
-    balloonsContainer.style.setProperty("--perspective-origin-y", "100vh");
-    balloonsContainer.style.overflow = "hidden";
-    balloonsContainer.style.position = "fixed";
-    balloonsContainer.style.inset = "0";
-    balloonsContainer.style.zIndex = "999";
-    balloonsContainer.style.display = "inline-block";
-    balloonsContainer.style.pointerEvents = "none";
-    balloonsContainer.style.perspective = "1500px";
-    balloonsContainer.style.perspectiveOrigin =
-      "var(--perspective-origin-x) var(--perspective-origin-y)";
-    balloonsContainer.style.contain = "style, layout, paint";
+
+    Object.assign(balloonsContainer.style, {
+      overflow: "hidden",
+      position: "fixed",
+      inset: "0",
+      zIndex: "999",
+      display: "inline-block",
+      pointerEvents: "none",
+      perspective: "1500px",
+      perspectiveOrigin: "50vw 100vh",
+      contain: "style, layout, paint",
+    });
 
     document.documentElement.appendChild(balloonsContainer);
 
@@ -168,9 +158,10 @@ export function balloons(): Promise<void> {
     const animations = balloonPositions.map((pos, index) => {
       const colorPair = colorPairs[index % colorPairs.length];
 
-      const balloon = createBalloon({
+      const balloon = createBallonElement({
+        balloonColor: colorPair[1],
+        lightColor: colorPair[0],
         width: balloonWidth,
-        colors: colorPair,
       });
       balloonsContainer.appendChild(balloon);
 

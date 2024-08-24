@@ -87,20 +87,20 @@
         var balloonColor = _a.balloonColor, lightColor = _a.lightColor, width = _a.width;
         var balloon = document.createElement("balloon");
         balloon.innerHTML = balloonSvgHTML;
-        balloon.style.position = "fixed";
-        balloon.style.overflow = "hidden";
-        balloon.style.position = "absolute";
-        balloon.style.top = "0";
-        balloon.style.left = "0";
-        balloon.style.display = "inline-block";
-        balloon.style.isolation = "isolate";
-        balloon.style.transformStyle = "preserve-3d";
-        balloon.style.backfaceVisibility = "hidden";
-        balloon.style.opacity = "0.001";
-        balloon.style.transform = "translate(calc(-100% + 1px), calc(-100% + 1px))";
-        balloon.style.contain = "style, layout, paint";
-        // without the will-change safari starts rendering ballons with a slight delay which makes the animation look bad
-        balloon.style.willChange = "transform";
+        Object.assign(balloon.style, {
+            position: "absolute",
+            overflow: "hidden",
+            top: "0",
+            left: "0",
+            display: "inline-block",
+            isolation: "isolate",
+            transformStyle: "preserve-3d",
+            backfaceVisibility: "hidden",
+            opacity: "0.001",
+            transform: "translate(calc(-100% + 1px), calc(-100% + 1px))",
+            contain: "style, layout, paint",
+            willChange: "transform", // Improves rendering performance in Safari
+        });
         balloon.style.setProperty(balloonColorProperty, balloonColor);
         balloon.style.setProperty(lightColorProperty, lightColor);
         balloon.style.setProperty(widthProperty, width + "px");
@@ -128,15 +128,6 @@
         // purple
         ["#cf85b8ee", "#a3509dff"],
     ];
-    function createBalloon(_a) {
-        var width = _a.width, colors = _a.colors;
-        var balloon = createBallonElement({
-            balloonColor: colors[1],
-            lightColor: colors[0],
-            width: width,
-        });
-        return balloon;
-    }
     function createBalloonAnimation(_a) {
         var balloon = _a.balloon, x = _a.x, y = _a.y, z = _a.z, targetX = _a.targetX, targetY = _a.targetY, targetZ = _a.targetZ, zIndex = _a.zIndex;
         balloon.style.zIndex = zIndex.toString();
@@ -163,18 +154,17 @@
     function balloons() {
         return new Promise(function (resolve) {
             var balloonsContainer = document.createElement("balloons");
-            balloonsContainer.style.setProperty("--perspective-origin-x", "50vw");
-            balloonsContainer.style.setProperty("--perspective-origin-y", "100vh");
-            balloonsContainer.style.overflow = "hidden";
-            balloonsContainer.style.position = "fixed";
-            balloonsContainer.style.inset = "0";
-            balloonsContainer.style.zIndex = "999";
-            balloonsContainer.style.display = "inline-block";
-            balloonsContainer.style.pointerEvents = "none";
-            balloonsContainer.style.perspective = "1500px";
-            balloonsContainer.style.perspectiveOrigin =
-                "var(--perspective-origin-x) var(--perspective-origin-y)";
-            balloonsContainer.style.contain = "style, layout, paint";
+            Object.assign(balloonsContainer.style, {
+                overflow: "hidden",
+                position: "fixed",
+                inset: "0",
+                zIndex: "999",
+                display: "inline-block",
+                pointerEvents: "none",
+                perspective: "1500px",
+                perspectiveOrigin: "50vw 100vh",
+                contain: "style, layout, paint",
+            });
             document.documentElement.appendChild(balloonsContainer);
             var sceneSize = { width: window.innerWidth, height: window.innerHeight };
             // make balloon height relative to screen size for this nice bokeh/perspective effect
@@ -214,9 +204,10 @@
             var currentZIndex = 1;
             var animations = balloonPositions.map(function (pos, index) {
                 var colorPair = colorPairs[index % colorPairs.length];
-                var balloon = createBalloon({
+                var balloon = createBallonElement({
+                    balloonColor: colorPair[1],
+                    lightColor: colorPair[0],
                     width: balloonWidth,
-                    colors: colorPair,
                 });
                 balloonsContainer.appendChild(balloon);
                 return createBalloonAnimation(__assign(__assign({ balloon: balloon }, pos), { zIndex: currentZIndex++ }));
