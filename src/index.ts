@@ -46,23 +46,38 @@ function createBalloonAnimation({
   // Add blur to the closes ballons for bokeh effect
   balloon.style.filter = `blur(${zIndex > 7 ? 8 : 0}px)`;
   const getAnimation = () => {
+    const tiltAngle = Math.random() * (15 - 8) + 8; // Random tilt angle between 8 and 15 degrees
+    const tiltDirection = Math.random() < 0.5 ? 1 : -1; // Random tilt direction
     return balloon.animate(
       [
         {
-          transform: `translate(-50%, 0%) translate3d(${x}px, ${y}px, ${z}px)`,
+          transform: `translate(-50%, 0%) translate3d(${x}px, ${y}px, ${z}px) rotate3d(0, 0, 1, ${
+            tiltDirection * -tiltAngle
+          }deg)`,
           opacity: 1,
+        },
+        {
+          transform: `translate(-50%, 0%) translate3d(${
+            x + (targetX - x) / 2
+          }px, ${y + (y + targetY * 5 - y) / 2}px, ${
+            z + (targetZ - z) / 2
+          }px) rotate3d(0, 0, 1, ${tiltDirection * tiltAngle}deg)`,
+          opacity: 1,
+          offset: 0.5,
         },
         {
           transform: `translate(-50%, 0%) translate3d(${targetX}px, ${
             y + targetY * 5
-          }px, ${targetZ}px)`,
+          }px, ${targetZ}px) rotate3d(0, 0, 1, ${
+            tiltDirection * -tiltAngle
+          }deg)`,
           opacity: 1,
         },
       ],
       {
         duration: (Math.random() * 1000 + 5000) * 5,
         easing: easings[Math.floor(Math.random() * easings.length)],
-        delay: zIndex * 160,
+        delay: zIndex * 200,
       }
     );
   };

@@ -99,6 +99,7 @@
             opacity: "0.001",
             transform: "translate(calc(-100% + 1px), calc(-100% + 1px))",
             contain: "style, layout, paint",
+            transformOrigin: "".concat(width / 2, "px ").concat(width / 2, "px"),
             willChange: "transform", // Improves rendering performance in Safari
         });
         balloon.style.setProperty(balloonColorProperty, balloonColor);
@@ -134,19 +135,26 @@
         // Add blur to the closes ballons for bokeh effect
         balloon.style.filter = "blur(".concat(zIndex > 7 ? 8 : 0, "px)");
         var getAnimation = function () {
+            var tiltAngle = Math.random() * (15 - 8) + 8; // Random tilt angle between 8 and 15 degrees
+            var tiltDirection = Math.random() < 0.5 ? 1 : -1; // Random tilt direction
             return balloon.animate([
                 {
-                    transform: "translate(-50%, 0%) translate3d(".concat(x, "px, ").concat(y, "px, ").concat(z, "px)"),
+                    transform: "translate(-50%, 0%) translate3d(".concat(x, "px, ").concat(y, "px, ").concat(z, "px) rotate3d(0, 0, 1, ").concat(tiltDirection * -tiltAngle, "deg)"),
                     opacity: 1,
                 },
                 {
-                    transform: "translate(-50%, 0%) translate3d(".concat(targetX, "px, ").concat(y + targetY * 5, "px, ").concat(targetZ, "px)"),
+                    transform: "translate(-50%, 0%) translate3d(".concat(x + (targetX - x) / 2, "px, ").concat(y + (y + targetY * 5 - y) / 2, "px, ").concat(z + (targetZ - z) / 2, "px) rotate3d(0, 0, 1, ").concat(tiltDirection * tiltAngle, "deg)"),
+                    opacity: 1,
+                    offset: 0.5,
+                },
+                {
+                    transform: "translate(-50%, 0%) translate3d(".concat(targetX, "px, ").concat(y + targetY * 5, "px, ").concat(targetZ, "px) rotate3d(0, 0, 1, ").concat(tiltDirection * -tiltAngle, "deg)"),
                     opacity: 1,
                 },
             ], {
                 duration: (Math.random() * 1000 + 5000) * 5,
                 easing: easings[Math.floor(Math.random() * easings.length)],
-                delay: zIndex * 160,
+                delay: zIndex * 200,
             });
         };
         return { balloon: balloon, getAnimation: getAnimation };
