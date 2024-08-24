@@ -1,6 +1,7 @@
 {
   "name": "balloons",
   "version": "0.0.1",
+  "description": "A library for creating animated balloon effects on web pages",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
   "types": "dist/index.d.ts",
@@ -12,6 +13,22 @@
     "dev": "rollup -c -w",
     "serve:docs": "npm run build && npx http-server docs -p 3000"
   },
+  "author": "Artur Bień <artur.bien@gmail.com>",
+  "license": "MIT",
+  "keywords": [
+    "balloons",
+    "animation",
+    "web",
+    "effects"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/arturbien/balloons.git"
+  },
+  "bugs": {
+    "url": "https://github.com/arturbien/balloons/issues"
+  },
+  "homepage": "https://github.com/arturbien/balloons#readme",
   "devDependencies": {
     "typescript": "^4.9.5",
     "rollup": "^2.79.1",
@@ -21,5 +38,9 @@
     "rollup-plugin-serve": "^1.1.0",
     "rollup-plugin-livereload": "^2.0.5",
     "http-server": "^14.1.1"
+  },
+  "peerDependencies": {},
+  "engines": {
+    "node": ">=12.0.0"
   }
 }
