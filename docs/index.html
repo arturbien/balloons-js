@@ -6,11 +6,15 @@
     <title>Balloons Package Documentation</title>
   </head>
   <style>
+    * {
+      box-sizing: border-box;
+    }
     html,
     body {
       width: 100%;
       height: 100%;
       overflow: hidden;
+      margin: 0;
     }
     body {
       font-family: Arial, sans-serif;
@@ -23,7 +27,12 @@
 
     h1 {
       color: black;
-      font-size: 120px;
+      font-size: 80px;
+    }
+    @media screen and (min-width: 768px) {
+      h1 {
+        font-size: 120px;
+      }
     }
 
     pre {
