@@ -6,6 +6,12 @@
     <title>Balloons Package Documentation</title>
   </head>
   <style>
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
     body {
       font-family: Arial, sans-serif;
       line-height: 1.6;
@@ -35,17 +41,14 @@
   <body>
     <div class="container">
       <h1>Balloons</h1>
-      <p>Welcome to the documentation for the Balloons package.</p>
+
       <h2>Usage</h2>
-      <pre><code>import { inflateBalloon } from 'balloons';
+      <pre><code>npm install balloons</code></pre>
+      <pre><code>import { balloons } from 'balloons';
 
-const result = inflateBalloon('red');
-console.log(result); // Output: SWAG: Inflating a red balloon!</code></pre>
+balloons();</code></pre>
 
-      <h2>Try it out</h2>
-      <input type="text" id="balloonColor" placeholder="Enter balloon color" />
-      <button id="inflateButton">Inflate Balloon</button>
-      <div id="result"></div>
+      <button id="releastBalloonsButton">Release Balloons</button>
     </div>
     <script src="script.js"></script>
   </body>

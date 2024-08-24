@@ -238,7 +238,7 @@
     }
 
     document.addEventListener("DOMContentLoaded", function () {
-        var button = document.getElementById("inflateButton");
+        var button = document.getElementById("releastBalloonsButton");
         button === null || button === void 0 ? void 0 : button.addEventListener("click", function () { return __awaiter(void 0, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
