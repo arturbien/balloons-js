@@ -153,7 +153,7 @@
             ], {
                 duration: (Math.random() * 1000 + 5000) * 5,
                 easing: easings[Math.floor(Math.random() * easings.length)],
-                delay: Math.random() * 200,
+                delay: Math.random() * 500,
             });
         };
         return { balloon: balloon, getAnimation: getAnimation };
@@ -178,7 +178,7 @@
             // make balloon height relative to screen size for this nice bokeh/perspective effect
             var balloonHeight = Math.floor(Math.min(sceneSize.width, sceneSize.height) * 1);
             var balloonWidth = (balloonDefaultSize.width / balloonDefaultSize.height) * balloonHeight;
-            var amount = Math.max(5, Math.round(window.innerWidth / (balloonWidth / 2)));
+            var amount = Math.max(7, Math.round(window.innerWidth / (balloonWidth / 2)));
             // make max dist depend on number of balloons and their size for realistic effect
             // we dont want them to be too separated or too squeezed together
             var maxDist = Math.max((amount * balloonWidth) / 2, (balloonWidth / 2) * 10);

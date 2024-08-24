@@ -72,7 +72,7 @@ function createBalloonAnimation({
       {
         duration: (Math.random() * 1000 + 5000) * 5,
         easing: easings[Math.floor(Math.random() * easings.length)],
-        delay: Math.random() * 200,
+        delay: Math.random() * 500,
       }
     );
   };
@@ -106,7 +106,7 @@ export function balloons(): Promise<void> {
     const balloonWidth =
       (balloonDefaultSize.width / balloonDefaultSize.height) * balloonHeight;
     let amount = Math.max(
-      5,
+      7,
       Math.round(window.innerWidth / (balloonWidth / 2))
     );
     // make max dist depend on number of balloons and their size for realistic effect
