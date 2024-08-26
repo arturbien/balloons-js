@@ -11,17 +11,18 @@
   <a href="https://www.paypal.me/react95">PayPal donation 💰</a>
 </h3>
 <p align="center">
-  Animated <b>balloons</b> effect for your website 🎈</p>
+  Animated <b>balloons</b> effect for your website. 🎈</p>
 
 ![og-image](https://github.com/user-attachments/assets/cc104de0-117b-4a27-bf1b-76a7280bf944)
 
 ### Usage
+
 ```sh
 npm install balloons-js
 ```
 
 ```js
 import { balloons } from "balloons-js";
-              
+
 balloons();
 ```
