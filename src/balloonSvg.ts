@@ -11,7 +11,7 @@ export const balloonDefaultSize = {
   width: 233,
   height: 609,
 };
-export const createBallonElement = ({
+export const createBalloonElement = ({
   balloonColor,
   lightColor,
   width,

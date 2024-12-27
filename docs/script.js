@@ -43,7 +43,7 @@
         width: 233,
         height: 609,
     };
-    var createBallonElement = function (_a) {
+    var createBalloonElement = function (_a) {
         var balloonColor = _a.balloonColor, lightColor = _a.lightColor, width = _a.width;
         var balloon = document.createElement("balloon");
         balloon.innerHTML = balloonSvgHTML;
@@ -77,7 +77,7 @@
         // easeOutCubic
         "cubic-bezier(0.33, 1, 0.68, 1)",
     ];
-    var colorPairs = [
+    var defaultColorPairs = [
         // yellow
         ["#ffec37ee", "#f8b13dff"],
         // red
@@ -119,26 +119,49 @@
         };
         return { balloon: balloon, getAnimation: getAnimation };
     }
-    function balloons() {
+    /**
+     * Creates a balloon animation in the given container.
+     * If no container is provided, it will create a full screen container.
+     * Recommendation for custom container:
+     * - Create a new custom container only for the balloons EVERY TIME YOU FIRE THIS FUNCTION as this function will add styles to it and destroy it after the animation is done.
+     * - The custom container's parent should be positioned relative or absolute.
+     * - The custom container should be positioned absolute as the full width and height of the parent container.
+     * - Set the z-index of the custom container to an appropriate value if needed.
+     */
+    function balloons(container, customColorPairs) {
         return new Promise(function (resolve) {
-            var balloonsContainer = document.createElement("balloons");
-            Object.assign(balloonsContainer.style, {
-                overflow: "hidden",
-                position: "fixed",
-                inset: "0",
-                zIndex: "999",
-                display: "inline-block",
-                pointerEvents: "none",
-                perspective: "1500px",
-                perspectiveOrigin: "50vw 100vh",
-                contain: "style, layout, paint",
-            });
-            document.documentElement.appendChild(balloonsContainer);
-            var sceneSize = { width: window.innerWidth, height: window.innerHeight };
+            var balloonsContainer = container ? container : document.createElement("balloons");
+            var containerWidth = window.innerWidth;
+            var containerHeight = window.innerHeight;
+            if (container) {
+                balloonsContainer.style.overflow = "hidden";
+                balloonsContainer.style.inset = "0";
+                balloonsContainer.style.display = "inline-block";
+                balloonsContainer.style.perspective = "1500px";
+                balloonsContainer.style.perspectiveOrigin = "50vw 100vh";
+                balloonsContainer.style.contain = "style, layout, paint";
+                containerWidth = container.offsetWidth;
+                containerHeight = container.offsetHeight;
+            }
+            else {
+                Object.assign(balloonsContainer.style, {
+                    overflow: "hidden",
+                    position: "fixed",
+                    inset: "0",
+                    zIndex: "999",
+                    display: "inline-block",
+                    pointerEvents: "none",
+                    perspective: "1500px",
+                    perspectiveOrigin: "50vw 100vh",
+                    contain: "style, layout, paint",
+                });
+                document.documentElement.appendChild(balloonsContainer);
+            }
+            var sceneSize = { width: containerWidth, height: containerHeight };
             // make balloon height relative to screen size for this nice bokeh/perspective effect
             var balloonHeight = Math.floor(Math.min(sceneSize.width, sceneSize.height) * 1);
             var balloonWidth = (balloonDefaultSize.width / balloonDefaultSize.height) * balloonHeight;
-            var amount = Math.max(7, Math.round(window.innerWidth / (balloonWidth / 2)));
+            var amount = Math.max(7, Math.round(containerWidth / (balloonWidth / 2)));
             // make max dist depend on number of balloons and their size for realistic effect
             // we dont want them to be too separated or too squeezed together
             var maxDist = Math.max((amount * balloonWidth) / 2, (balloonWidth / 2) * 10);
@@ -146,10 +169,10 @@
             for (var i = 0; i < amount; i++) {
                 var x = Math.round(sceneSize.width * Math.random());
                 // make sure balloons first render below the bottom of the screen
-                var y = window.innerHeight;
+                var y = containerHeight;
                 var z = Math.round(-1 * (Math.random() * maxDist));
                 var targetX = Math.round(x + Math.random() * balloonWidth * 6 * (Math.random() > 0.5 ? 1 : -1));
-                var targetY = -window.innerHeight;
+                var targetY = -containerHeight;
                 // balloons don't move in the Z direction
                 var targetZ = z;
                 balloonPositions.push({
@@ -170,9 +193,10 @@
             filtersElement.innerHTML = svgFiltersHtml;
             balloonsContainer.appendChild(filtersElement);
             var currentZIndex = 1;
+            var colorPairs = customColorPairs ? customColorPairs : defaultColorPairs;
             var animations = balloonPositions.map(function (pos, index) {
                 var colorPair = colorPairs[index % colorPairs.length];
-                var balloon = createBallonElement({
+                var balloon = createBalloonElement({
                     balloonColor: colorPair[1],
                     lightColor: colorPair[0],
                     width: balloonWidth,
